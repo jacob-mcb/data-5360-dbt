@@ -13,3 +13,7 @@ models:
     description: "Store Dimension"
   - name: fact_Sales
     description: "Oliver Sales Fact"
+  - name: "stg_employee_certification"
+    description: "staging for data on certifications of employees"
+  - name: fact_certifications
+    description: "Fact table for certifications"
