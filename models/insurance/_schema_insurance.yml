@@ -20,7 +20,7 @@ models:
       Each record represents a call between a customer and an agent on a given date.
   - name: dim_policy
     description: "Insurance Policy Dimension"
-    columns:
+    columns: 
       - name: policy_key
         tests:
           - unique
