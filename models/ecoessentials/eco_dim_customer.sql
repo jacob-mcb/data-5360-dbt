@@ -1,0 +1,20 @@
+{{ config(
+    materialized = 'table',
+    schema = 'dw_ecoessentials'
+    )
+}}
+
+
+select
+{{ dbt_utils.generate_surrogate_key(['customer_id', 'customer_first_name']) }} as customer_key,
+customer_id,
+customer_first_name,
+customer_last_name,
+customer_phone,
+customer_address,
+customer_city,
+customer_state,
+customer_zip,
+customer_country,
+customer_email,
+FROM {{ source('ecoessentials_landing', 'customer') }}
