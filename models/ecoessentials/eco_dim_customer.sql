@@ -1,20 +1,21 @@
 {{ config(
     materialized = 'table',
     schema = 'dw_ecoessentials'
-    )
-}}
-
+) }}
 
 select
-{{ dbt_utils.generate_surrogate_key(['customer_id', 'customer_first_name']) }} as customer_key,
-customer_id,
-customer_first_name,
-customer_last_name,
-customer_phone,
-customer_address,
-customer_city,
-customer_state,
-customer_zip,
-customer_country,
-customer_email,
-FROM {{ source('ecoessentials_landing', 'customer') }}
+    {{ dbt_utils.generate_surrogate_key(['customer_id', 'customer_first_name']) }} as customer_key,
+    c.customer_id,
+    m.subscriberid as subscriber_id,
+    c.customer_first_name,
+    c.customer_last_name,
+    c.customer_phone,
+    c.customer_address,
+    c.customer_city,
+    c.customer_state,
+    c.customer_zip,
+    c.customer_country,
+    c.customer_email
+from {{ source('ecoessentials_landing', 'customer') }} c
+left join {{ source('marketing_landing', 'marketingemails') }} m
+    on try_to_number(c.customer_id) = try_to_number(m.customerid)
