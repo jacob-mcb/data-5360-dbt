@@ -2,48 +2,71 @@
     materialized = 'table',
     schema = 'dw_ecoessentials'
 ) }}
-with orders as (
+
+with order_src as (
     select *
-    from {{ source('ecoessentials_landing', 'order') }}
+    from {{ source('ecoessentials_landing', 'ORDER') }}
 ),
+
 order_line as (
     select *
     from {{ source('ecoessentials_landing', 'order_line') }}
 ),
+
+product_src as (
+    select *
+    from {{ source('ecoessentials_landing', 'product') }}
+),
+
 products as (
     select *
     from {{ ref('eco_dim_product') }}
 ),
+
 customers as (
     select *
     from {{ ref('eco_dim_customer') }}
 ),
+
 campaigns as (
     select *
     from {{ ref('eco_dim_promotional_campaign') }}
 ),
+
 dates as (
     select *
     from {{ ref('eco_dim_date') }}
 )
 select
-    ol.orderid as order_id,
+    ol.order_id as order_id,
+
     d.date_key,
     p.product_key,
     c.customer_key,
     cam.campaign_key,
+  
     ol.quantity,
-    ol.price,
+    ps.price,                
     ol.discount,
-    (ol.price - ol.discount) as price_after_discounts
+    ol.price_after_discount 
+
 from order_line ol
-join orders o
-    on ol.orderid = o.orderid
+join order_src o
+    on ol.order_id = o.order_id
+
+
 left join products p
-    on ol.productid = p.product_id
+    on ol.product_id = p.product_id
+
+
+left join product_src ps
+    on ol.product_id = ps.product_id
+
 left join customers c
-    on o.customerid = c.customer_id
+    on o.customer_id = c.customer_id
+
 left join campaigns cam
-    on o.campaignid = cam.campaign_id
+    on ol.campaign_id = cam.campaign_id
+
 left join dates d
-    on o.order_date = d.date
+    on o.order_timestamp = d.date

@@ -4,14 +4,16 @@ sources:
   - name: ecoessentials_landing
     database: jacobmcbride
     schema: DW_ECOESSENTIALS_ECOESSENTIALS_TRANSACTIONAL_DB
-    quoting:
-      identifier: true
+
     tables:
-      - name: customer
       - name: ORDER
+        quoting:
+          identifier: true
+      - name: customer
       - name: order_line
       - name: promotional_campaign
       - name: product
+
   - name: marketing_landing
     database: jacobmcbride
     schema: s3_ecoessentials

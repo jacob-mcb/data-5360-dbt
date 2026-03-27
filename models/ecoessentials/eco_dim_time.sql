@@ -4,7 +4,6 @@
 ) }}
 
 with minutes as (
-    -- 1440 minutes in a day
     select
         seq4() as n
     from table(generator(rowcount => 1440))
