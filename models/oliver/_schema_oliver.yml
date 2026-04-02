@@ -4,6 +4,10 @@ models:
   - name: oliver_dim_employee
     description: "Employee Dimension"
   - name: oliver_dim_customer
+    columns:
+      - name: customer_key
+        tests:
+          - unique
     description: "Customer Dimension"
   - name: oliver_dim_date
     description: "Date Dimension"
@@ -13,7 +17,30 @@ models:
     description: "Store Dimension"
   - name: fact_Sales
     description: "Oliver Sales Fact"
+    columns:
+      - name: customer_key
+        description: "A foreign key to the customer dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('oliver_dim_customer')
+              field: customer_key
   - name: "stg_employee_certification"
     description: "staging for data on certifications of employees"
+    columns:
+      - name: certification_name
+        description: "The official name of the certification earned by the employee"
+        tests:
+          - accepted_values:
+              values:
+                - 'Conflict Resolution'
+                - 'Point of Sale Operations'
+                - 'Product Knowledge Level 2'
+                - 'Customer Service Excellence'
+                - 'Cash Handling and Security'
+                - 'Inventory Management'
+                - 'Workplace Safety'
+                - 'Strategic Retail Operations'
+                - 'Leadership and Coaching'
   - name: fact_certifications
     description: "Fact table for certifications"
