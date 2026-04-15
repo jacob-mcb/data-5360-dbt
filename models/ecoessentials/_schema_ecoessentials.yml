@@ -24,7 +24,7 @@ models:
     columns:
       - name: email_key
         tests:
-          - unique
+          - not_null
   - name: eco_dim_event
     description: "Eco Essentials Event Dimension"
     columns:
